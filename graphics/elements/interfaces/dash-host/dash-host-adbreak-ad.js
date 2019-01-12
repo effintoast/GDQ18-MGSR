@@ -1,88 +1,105 @@
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
+var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+  var c = arguments.length,
+      r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+      d;
+  if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+  return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-const { customElement, property } = Polymer.decorators;
+
+const {
+  customElement,
+  property
+} = Polymer.decorators;
 let DashHostAdbreakAdElement = class DashHostAdbreakAdElement extends Polymer.MutableData(Polymer.Element) {
-    static get observers() {
-        return [
-            '_updateProgressBar(ad.state.*)'
-        ];
+  static get observers() {
+    return ['_updateProgressBar(ad.state.*)'];
+  }
+
+  frameNumberToTimeString(fps, frameNumber) {
+    if (typeof fps !== 'number' || Number.isNaN(fps) || typeof frameNumber !== 'number' || Number.isNaN(frameNumber)) {
+      return ':??';
     }
-    frameNumberToTimeString(fps, frameNumber) {
-        if (typeof fps !== 'number' || Number.isNaN(fps) ||
-            typeof frameNumber !== 'number' || Number.isNaN(frameNumber)) {
-            return ':??';
-        }
-        return this.formatSeconds(frameNumber / fps);
+
+    return this.formatSeconds(frameNumber / fps);
+  }
+
+  completeImageAd() {
+    nodecg.sendMessage('intermissions:completeImageAd', this.ad.id);
+  }
+
+  _booleanReflect(bool) {
+    return bool;
+  }
+
+  _updateProgressBar() {
+    const progressFillElem = this.$['progress-fill'];
+
+    if (!this.ad) {
+      progressFillElem.style.transform = 'scaleX(0)';
+      return;
     }
-    completeImageAd() {
-        nodecg.sendMessage('intermissions:completeImageAd', this.ad.id);
+
+    let percent = this.ad.state.frameNumber / this.ad.state.durationFrames;
+    percent = Math.max(percent, 0); // Clamp to minimum 0.
+
+    percent = Math.min(percent, 1); // Clamp to maximum 1.
+
+    progressFillElem.style.transform = `scaleX(${percent})`;
+  }
+
+  _calcAdvanceHidden(ad, adBreak) {
+    if (!ad || !adBreak) {
+      return true;
     }
-    _booleanReflect(bool) {
-        return bool;
+
+    const lastAd = adBreak.ads[adBreak.ads.length - 1];
+    return ad.adType.toLowerCase() !== 'image' || ad === lastAd;
+  }
+  /**
+   * Formats a number of seconds into a string ([hh:]mm:ss).
+   * @param seconds - The number of seconds to format.
+   * @returns The formatted time sting.
+   */
+
+
+  formatSeconds(seconds) {
+    const hms = {
+      h: Math.floor(seconds / 3600),
+      m: Math.floor(seconds % 3600 / 60),
+      s: Math.floor(seconds % 3600 % 60)
+    };
+    let str = '';
+
+    if (hms.h) {
+      str += `${hms.h}:`;
     }
-    _updateProgressBar() {
-        const progressFillElem = this.$['progress-fill'];
-        if (!this.ad) {
-            progressFillElem.style.transform = 'scaleX(0)';
-            return;
-        }
-        let percent = this.ad.state.frameNumber / this.ad.state.durationFrames;
-        percent = Math.max(percent, 0); // Clamp to minimum 0.
-        percent = Math.min(percent, 1); // Clamp to maximum 1.
-        progressFillElem.style.transform = `scaleX(${percent})`;
-    }
-    _calcAdvanceHidden(ad, adBreak) {
-        if (!ad || !adBreak) {
-            return true;
-        }
-        const lastAd = adBreak.ads[adBreak.ads.length - 1];
-        return ad.adType.toLowerCase() !== 'image' || ad === lastAd;
-    }
-    /**
-     * Formats a number of seconds into a string ([hh:]mm:ss).
-     * @param seconds - The number of seconds to format.
-     * @returns The formatted time sting.
-     */
-    formatSeconds(seconds) {
-        const hms = {
-            h: Math.floor(seconds / 3600),
-            m: Math.floor(seconds % 3600 / 60),
-            s: Math.floor(seconds % 3600 % 60)
-        };
-        let str = '';
-        if (hms.h) {
-            str += `${hms.h}:`;
-        }
-        str += `${(hms.m < 10 ? `0${hms.m}` : hms.m)}:${(hms.s < 10 ? `0${hms.s}` : hms.s)}`;
-        return str;
-    }
+
+    str += `${hms.m < 10 ? `0${hms.m}` : hms.m}:${hms.s < 10 ? `0${hms.s}` : hms.s}`;
+    return str;
+  }
+
 };
-__decorate([
-    property({ type: Object })
-], DashHostAdbreakAdElement.prototype, "adBreak", void 0);
-__decorate([
-    property({ type: Object })
-], DashHostAdbreakAdElement.prototype, "ad", void 0);
-__decorate([
-    property({
-        type: Boolean,
-        reflectToAttribute: true,
-        computed: '_booleanReflect(ad.state.completed)'
-    })
-], DashHostAdbreakAdElement.prototype, "completed", void 0);
-__decorate([
-    property({
-        type: Boolean,
-        reflectToAttribute: true,
-        computed: '_booleanReflect(ad.state.hasFile)'
-    })
-], DashHostAdbreakAdElement.prototype, "hasFile", void 0);
-DashHostAdbreakAdElement = __decorate([
-    customElement('dash-host-adbreak-ad')
-], DashHostAdbreakAdElement);
+
+__decorate([property({
+  type: Object
+})], DashHostAdbreakAdElement.prototype, "adBreak", void 0);
+
+__decorate([property({
+  type: Object
+})], DashHostAdbreakAdElement.prototype, "ad", void 0);
+
+__decorate([property({
+  type: Boolean,
+  reflectToAttribute: true,
+  computed: '_booleanReflect(ad.state.completed)'
+})], DashHostAdbreakAdElement.prototype, "completed", void 0);
+
+__decorate([property({
+  type: Boolean,
+  reflectToAttribute: true,
+  computed: '_booleanReflect(ad.state.hasFile)'
+})], DashHostAdbreakAdElement.prototype, "hasFile", void 0);
+
+DashHostAdbreakAdElement = __decorate([customElement('dash-host-adbreak-ad')], DashHostAdbreakAdElement);
 export default DashHostAdbreakAdElement;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZGFzaC1ob3N0LWFkYnJlYWstYWQuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJkYXNoLWhvc3QtYWRicmVhay1hZC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7QUFFQSxNQUFNLEVBQUMsYUFBYSxFQUFFLFFBQVEsRUFBQyxHQUFHLE9BQU8sQ0FBQyxVQUFVLENBQUM7QUFHckQsSUFBcUIsd0JBQXdCLEdBQTdDLE1BQXFCLHdCQUF5QixTQUFRLE9BQU8sQ0FBQyxXQUFXLENBQUMsT0FBTyxDQUFDLE9BQU8sQ0FBQztJQXFCekYsTUFBTSxLQUFLLFNBQVM7UUFDbkIsT0FBTztZQUNOLGdDQUFnQztTQUNoQyxDQUFDO0lBQ0gsQ0FBQztJQUVELHVCQUF1QixDQUFDLEdBQVksRUFBRSxXQUFvQjtRQUN6RCxJQUFJLE9BQU8sR0FBRyxLQUFLLFFBQVEsSUFBSSxNQUFNLENBQUMsS0FBSyxDQUFDLEdBQUcsQ0FBQztZQUMvQyxPQUFPLFdBQVcsS0FBSyxRQUFRLElBQUksTUFBTSxDQUFDLEtBQUssQ0FBQyxXQUFXLENBQUMsRUFBRTtZQUM5RCxPQUFPLEtBQUssQ0FBQztTQUNiO1FBQ0QsT0FBTyxJQUFJLENBQUMsYUFBYSxDQUFDLFdBQVcsR0FBRyxHQUFHLENBQUMsQ0FBQztJQUM5QyxDQUFDO0lBRUQsZUFBZTtRQUNkLE1BQU0sQ0FBQyxXQUFXLENBQUMsK0JBQStCLEVBQUUsSUFBSSxDQUFDLEVBQUUsQ0FBQyxFQUFFLENBQUMsQ0FBQztJQUNqRSxDQUFDO0lBRUQsZUFBZSxDQUFDLElBQWE7UUFDNUIsT0FBTyxJQUFJLENBQUM7SUFDYixDQUFDO0lBRUQsa0JBQWtCO1FBQ2pCLE1BQU0sZ0JBQWdCLEdBQUcsSUFBSSxDQUFDLENBQUMsQ0FBQyxlQUFlLENBQW1CLENBQUM7UUFFbkUsSUFBSSxDQUFDLElBQUksQ0FBQyxFQUFFLEVBQUU7WUFDYixnQkFBZ0IsQ0FBQyxLQUFLLENBQUMsU0FBUyxHQUFHLFdBQVcsQ0FBQztZQUMvQyxP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
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,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

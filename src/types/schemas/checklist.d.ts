@@ -10,7 +10,6 @@ export interface Checklist {
 	extraContent: ChecklistGroup;
 	techStationDuties: ChecklistGroup;
 	stageTechDuties: ChecklistGroup;
-	audioEngineerDuties: ChecklistGroup;
 	special: ChecklistGroup;
 }
 export interface ChecklistTask {

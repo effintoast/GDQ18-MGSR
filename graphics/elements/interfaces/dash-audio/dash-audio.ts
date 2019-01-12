@@ -1,4 +1,4 @@
-import {Checklist, ChecklistGroup} from '../../../../src/types/schemas/checklist';
+import {Checklist} from '../../../../src/types/schemas/checklist';
 import {Run, Runner} from '../../../../src/types';
 import {ChecklistComplete} from '../../../../src/types/schemas/checklistComplete';
 import {Stopwatch} from '../../../../src/types/schemas/stopwatch';
@@ -12,8 +12,7 @@ const stopwatch = nodecg.Replicant<Stopwatch>('stopwatch');
 
 @customElement('dash-audio')
 export default class DashAudioElement extends Polymer.MutableData(Polymer.Element) {
-	@property({type: Array})
-	audioEngineerDuties: ChecklistGroup;
+
 
 	@property({type: Array})
 	runners: Runner[];
@@ -43,9 +42,6 @@ export default class DashAudioElement extends Polymer.MutableData(Polymer.Elemen
 	ready() {
 		super.ready();
 
-		checklist.on('change', newVal => {
-			this.audioEngineerDuties = newVal.audioEngineerDuties;
-		});
 
 		checklistComplete.on('change', newVal => {
 			const statusDiv = this.$.checklistStatus as HTMLDivElement;

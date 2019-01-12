@@ -21,8 +21,6 @@ export default class DashProducerChecklistElement extends Polymer.MutableData(Po
 	@property({type: Array})
 	techStationDuties: ChecklistGroup;
 
-	@property({type: Array})
-	audioEngineerDuties: ChecklistGroup;
 
 	@property({type: Array})
 	specialDuties: ChecklistGroup;
@@ -33,7 +31,6 @@ export default class DashProducerChecklistElement extends Polymer.MutableData(Po
 			this.extraContent = newVal.extraContent;
 			this.techStationDuties = newVal.techStationDuties;
 			this.stageTechDuties = newVal.stageTechDuties;
-			this.audioEngineerDuties = newVal.audioEngineerDuties;
 			this.specialDuties = newVal.special;
 		});
 	}

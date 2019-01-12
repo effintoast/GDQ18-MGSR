@@ -191,12 +191,12 @@ async function update() {
         uri: urls_1.GDQUrls.runs,
         json: true
     });
-    const adsPromise = false ?
+    const adsPromise = TRACKER_CREDENTIALS_CONFIGURED ?
         request({
             uri: urls_1.GDQUrls.ads,
             json: true
         }) : Promise.resolve([]);
-    const interviewsPromise = false ?
+    const interviewsPromise = TRACKER_CREDENTIALS_CONFIGURED ?
         request({
             uri: urls_1.GDQUrls.interviews,
             json: true

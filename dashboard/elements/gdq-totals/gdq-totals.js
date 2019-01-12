@@ -1,65 +1,81 @@
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
+var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+  var c = arguments.length,
+      r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+      d;
+  if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+  return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-const { customElement, property } = Polymer.decorators;
+
+const {
+  customElement,
+  property
+} = Polymer.decorators;
 const cashTotal = nodecg.Replicant('total');
 const autoUpdateTotal = nodecg.Replicant('autoUpdateTotal');
 let GDQTotalsElement = class GDQTotalsElement extends Polymer.Element {
-    constructor() {
-        super(...arguments);
-        this.cashTotal = '?';
-        this.bitsTotal = '?';
+  constructor() {
+    super(...arguments);
+    this.cashTotal = '?';
+    this.bitsTotal = '?';
+  }
+
+  ready() {
+    super.ready();
+    cashTotal.on('change', newVal => {
+      this.cashTotal = newVal.formatted;
+    });
+    autoUpdateTotal.on('change', newVal => {
+      this.autoUpdateTotal = newVal;
+    });
+  }
+
+  editCashTotal() {
+    if (!cashTotal.value) {
+      return;
     }
-    ready() {
-        super.ready();
-        cashTotal.on('change', newVal => {
-            this.cashTotal = newVal.formatted;
-        });
-        autoUpdateTotal.on('change', newVal => {
-            this.autoUpdateTotal = newVal;
-        });
+
+    this.$.editTotalInput.value = String(cashTotal.value.raw);
+    this._editTarget = 'cash';
+    this.$.editDialog.open();
+  }
+
+  _handleAutoUpdateToggleChange(e) {
+    if (!e.target) {
+      return;
     }
-    editCashTotal() {
-        if (!cashTotal.value) {
-            return;
-        }
-        this.$.editTotalInput.value = String(cashTotal.value.raw);
-        this._editTarget = 'cash';
-        this.$.editDialog.open();
-    }
-    _handleAutoUpdateToggleChange(e) {
-        if (!e.target) {
-            return;
-        }
-        autoUpdateTotal.value = Boolean(e.target.checked);
-    }
-    _handleEditDialogConfirmed() {
-        nodecg.sendMessage('setTotal', {
-            type: this._editTarget,
-            newValue: parseFloat(String(this.$.editTotalInput.value))
-        });
-    }
+
+    autoUpdateTotal.value = Boolean(e.target.checked);
+  }
+
+  _handleEditDialogConfirmed() {
+    nodecg.sendMessage('setTotal', {
+      type: this._editTarget,
+      newValue: parseFloat(String(this.$.editTotalInput.value))
+    });
+  }
+
 };
-__decorate([
-    property({ type: String })
-], GDQTotalsElement.prototype, "cashTotal", void 0);
-__decorate([
-    property({ type: String })
-], GDQTotalsElement.prototype, "bitsTotal", void 0);
-__decorate([
-    property({ type: Boolean })
-], GDQTotalsElement.prototype, "autoUpdateTotal", void 0);
-__decorate([
-    property({ type: Boolean })
-], GDQTotalsElement.prototype, "recordTrackerEnabled", void 0);
-__decorate([
-    property({ type: String })
-], GDQTotalsElement.prototype, "_editTarget", void 0);
-GDQTotalsElement = __decorate([
-    customElement('gdq-totals')
-], GDQTotalsElement);
+
+__decorate([property({
+  type: String
+})], GDQTotalsElement.prototype, "cashTotal", void 0);
+
+__decorate([property({
+  type: String
+})], GDQTotalsElement.prototype, "bitsTotal", void 0);
+
+__decorate([property({
+  type: Boolean
+})], GDQTotalsElement.prototype, "autoUpdateTotal", void 0);
+
+__decorate([property({
+  type: Boolean
+})], GDQTotalsElement.prototype, "recordTrackerEnabled", void 0);
+
+__decorate([property({
+  type: String
+})], GDQTotalsElement.prototype, "_editTarget", void 0);
+
+GDQTotalsElement = __decorate([customElement('gdq-totals')], GDQTotalsElement);
 export default GDQTotalsElement;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZ2RxLXRvdGFscy5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImdkcS10b3RhbHMudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7O0FBRUEsTUFBTSxFQUFDLGFBQWEsRUFBRSxRQUFRLEVBQUMsR0FBRyxPQUFPLENBQUMsVUFBVSxDQUFDO0FBRXJELE1BQU0sU0FBUyxHQUFHLE1BQU0sQ0FBQyxTQUFTLENBQVEsT0FBTyxDQUFDLENBQUM7QUFDbkQsTUFBTSxlQUFlLEdBQUcsTUFBTSxDQUFDLFNBQVMsQ0FBVSxpQkFBaUIsQ0FBQyxDQUFDO0FBR3JFLElBQXFCLGdCQUFnQixHQUFyQyxNQUFxQixnQkFBaUIsU0FBUSxPQUFPLENBQUMsT0FBTztJQUQ3RDs7UUFHQyxjQUFTLEdBQUcsR0FBRyxDQUFDO1FBR2hCLGNBQVMsR0FBRyxHQUFHLENBQUM7SUEyQ2pCLENBQUM7SUFoQ0EsS0FBSztRQUNKLEtBQUssQ0FBQyxLQUFLLEVBQUUsQ0FBQztRQUNkLFNBQVMsQ0FBQyxFQUFFLENBQUMsUUFBUSxFQUFFLE1BQU0sQ0FBQyxFQUFFO1lBQy9CLElBQUksQ0FBQyxTQUFTLEdBQUcsTUFBTSxDQUFDLFNBQVMsQ0FBQztRQUNuQyxDQUFDLENBQUMsQ0FBQztRQUNILGVBQWUsQ0FBQyxFQUFFLENBQUMsUUFBUSxFQUFFLE1BQU0sQ0FBQyxFQUFFO1lBQ3JDLElBQUksQ0FBQyxlQUFlLEdBQUcsTUFBTSxDQUFDO1FBQy9CLENBQUMsQ0FBQyxDQUFDO0lBQ0osQ0FBQztJQUVELGFBQWE7UUFDWixJQUFJLENBQUMsU0FBUyxDQUFDLEtBQUssRUFBRTtZQUNyQixPQUFPO1NBQ1A7UUFDQSxJQUFJLENBQUMsQ0FBQyxDQUFDLGNBQW9DLENBQUMsS0FBSyxHQUFHLE1BQU0sQ0FBQyxTQUFTLENBQUMsS0FBSyxDQUFDLEdBQUcsQ0FBQyxDQUFDO1FBQ2pGLElBQUksQ0FBQyxXQUFXLEdBQUcsTUFBTSxDQUFDO1FBQ3pCLElBQUksQ0FBQyxDQUFDLENBQUMsVUFBaUMsQ0FBQyxJQUFJLEVBQUUsQ0FBQztJQUNsRCxDQUFDO0lBRUQsNkJBQTZCLENBQUMsQ0FBUTtRQUNyQyxJQUFJLENBQUMsQ0FBQyxDQUFDLE1BQU0sRUFBRTtZQUNkLE9BQU87U0FDUDtRQUNELGVBQWUsQ0FBQyxLQUFLLEdBQUcsT0FBTyxDQUFFLENBQUMsQ0FBQyxNQUFtQyxDQUFDLE9BQU8sQ0FBQyxDQUFDO0lBQ2pGLENBQUM7SUFFRCwwQkFBMEI7UUFDekIsTUFBTSxDQUFDLFdBQVcsQ0FBQyxVQUFVLEVBQUU7WUFDOUIsSUFBSSxFQUFFLElBQUksQ0FBQyxXQUFXO1lBQ3RCLFFBQVEsRUFBRSxVQUFVLENBQUMsTUFBTSxDQUFFLElBQUksQ0FBQyxDQUFDLENBQUMsY0FBb0MsQ0FBQyxLQUFLLENBQUMsQ0FBQztTQUNoRixDQUFDLENBQUM7SUFDSixDQUFDO0NBQ0QsQ0FBQTtBQTlDQTtJQURDLFFBQVEsQ0FBQyxFQUFDLElBQUksRUFBRSxNQUFNLEVBQUMsQ0FBQzttREFDVDtBQUdoQjtJQURDLFFBQVEsQ0FBQyxFQUFDLElBQUksRUFBRSxNQUFNLEVBQUMsQ0FBQzttREFDVDtBQUdoQjtJQURDLFFBQVEsQ0FBQyxFQUFDLElBQUksRUFBRSxPQUFPLEVBQUMsQ0FBQzt5REFDRDtBQUd6QjtJQURDLFFBQVEsQ0FBQyxFQUFDLElBQUksRUFBRSxPQUFPLEVBQUMsQ0FBQzs4REFDSTtBQUc5QjtJQURDLFFBQVEsQ0FBQyxFQUFDLElBQUksRUFBRSxNQUFNLEVBQUMsQ0FBQztxREFDTDtBQWRBLGdCQUFnQjtJQURwQyxhQUFhLENBQUMsWUFBWSxDQUFDO0dBQ1AsZ0JBQWdCLENBZ0RwQztlQWhEb0IsZ0JBQWdCIn0=
+//# sourceMappingURL=data:application/json;charset=utf-8;base64,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

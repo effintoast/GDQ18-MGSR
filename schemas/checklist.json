@@ -40,9 +40,6 @@
 		"stageTechDuties": {
 			"$ref": "#/definitions/checklistGroup"
 		},
-		"audioEngineerDuties": {
-			"$ref": "#/definitions/checklistGroup"
-		},
 		"special": {
 			"$ref": "#/definitions/checklistGroup"
 		}
@@ -51,7 +48,6 @@
 		"extraContent",
 		"techStationDuties",
 		"stageTechDuties",
-		"audioEngineerDuties",
 		"special"
 	],
 
@@ -71,10 +67,6 @@
 			{"name": "Steam Notifications Off", "shortName": "Steam Notifications", "complete": false},
 			{"name": "Restart Elgato Recording", "shortName": "Restart Elgato Rec.", "complete": false},
 			{"name": "Remove Excess Chairs", "shortName": "Remove Chairs", "complete": false}
-		],
-		"audioEngineerDuties": [
-			{"name": "Runner Game Audio", "complete": false},
-			{"name": "Stream Audio", "complete": false}
 		],
 		"special": [
 			{"name": "Cycle Recordings", "complete": false}

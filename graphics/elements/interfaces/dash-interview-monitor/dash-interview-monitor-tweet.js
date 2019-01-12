@@ -1,4 +1,9 @@
-import * as tslib_1 from "tslib";
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 var DashInterviewMonitorTweetElement_1;
 const { customElement, property } = Polymer.decorators;
 let DashInterviewMonitorTweetElement = DashInterviewMonitorTweetElement_1 = class DashInterviewMonitorTweetElement extends Polymer.Element {
@@ -9,11 +14,11 @@ let DashInterviewMonitorTweetElement = DashInterviewMonitorTweetElement_1 = clas
         this.$.body.innerHTML = this.tweet.text;
     }
 };
-tslib_1.__decorate([
+__decorate([
     property({ type: Object, observer: DashInterviewMonitorTweetElement_1.prototype.populateBody })
 ], DashInterviewMonitorTweetElement.prototype, "tweet", void 0);
-DashInterviewMonitorTweetElement = DashInterviewMonitorTweetElement_1 = tslib_1.__decorate([
+DashInterviewMonitorTweetElement = DashInterviewMonitorTweetElement_1 = __decorate([
     customElement('dash-interview-monitor-tweet')
 ], DashInterviewMonitorTweetElement);
 export default DashInterviewMonitorTweetElement;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZGFzaC1pbnRlcnZpZXctbW9uaXRvci10d2VldC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImRhc2gtaW50ZXJ2aWV3LW1vbml0b3ItdHdlZXQudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7QUFFQSxNQUFNLEVBQUMsYUFBYSxFQUFFLFFBQVEsRUFBQyxHQUFHLE9BQU8sQ0FBQyxVQUFVLENBQUM7QUFHckQsSUFBcUIsZ0NBQWdDLHdDQUFyRCxNQUFxQixnQ0FBaUMsU0FBUSxPQUFPLENBQUMsT0FBTztJQUk1RSxZQUFZO1FBQ1gsSUFBSSxDQUFDLElBQUksQ0FBQyxLQUFLLEVBQUU7WUFDaEIsT0FBTztTQUNQO1FBRUQsSUFBSSxDQUFDLENBQUMsQ0FBQyxJQUFJLENBQUMsU0FBUyxHQUFHLElBQUksQ0FBQyxLQUFLLENBQUMsSUFBSSxDQUFDO0lBQ3pDLENBQUM7Q0FDRCxDQUFBO0FBVEE7SUFEQyxRQUFRLENBQUMsRUFBQyxJQUFJLEVBQUUsTUFBTSxFQUFFLFFBQVEsRUFBRSxrQ0FBZ0MsQ0FBQyxTQUFTLENBQUMsWUFBWSxFQUFDLENBQUM7K0RBQy9FO0FBRk8sZ0NBQWdDO0lBRHBELGFBQWEsQ0FBQyw4QkFBOEIsQ0FBQztHQUN6QixnQ0FBZ0MsQ0FXcEQ7ZUFYb0IsZ0NBQWdDIn0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZGFzaC1pbnRlcnZpZXctbW9uaXRvci10d2VldC5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImRhc2gtaW50ZXJ2aWV3LW1vbml0b3ItdHdlZXQudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6Ijs7Ozs7OztBQUVBLE1BQU0sRUFBQyxhQUFhLEVBQUUsUUFBUSxFQUFDLEdBQUcsT0FBTyxDQUFDLFVBQVUsQ0FBQztBQUdyRCxJQUFxQixnQ0FBZ0Msd0NBQXJELE1BQXFCLGdDQUFpQyxTQUFRLE9BQU8sQ0FBQyxPQUFPO0lBSTVFLFlBQVk7UUFDWCxJQUFJLENBQUMsSUFBSSxDQUFDLEtBQUssRUFBRTtZQUNoQixPQUFPO1NBQ1A7UUFFRCxJQUFJLENBQUMsQ0FBQyxDQUFDLElBQUksQ0FBQyxTQUFTLEdBQUcsSUFBSSxDQUFDLEtBQUssQ0FBQyxJQUFJLENBQUM7SUFDekMsQ0FBQztDQUNELENBQUE7QUFUQTtJQURDLFFBQVEsQ0FBQyxFQUFDLElBQUksRUFBRSxNQUFNLEVBQUUsUUFBUSxFQUFFLGtDQUFnQyxDQUFDLFNBQVMsQ0FBQyxZQUFZLEVBQUMsQ0FBQzsrREFDL0U7QUFGTyxnQ0FBZ0M7SUFEcEQsYUFBYSxDQUFDLDhCQUE4QixDQUFDO0dBQ3pCLGdDQUFnQyxDQVdwRDtlQVhvQixnQ0FBZ0MifQ==

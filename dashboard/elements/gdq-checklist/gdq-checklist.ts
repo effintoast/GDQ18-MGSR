@@ -15,9 +15,6 @@ export default class GDQChecklistElement extends Polymer.MutableData(Polymer.Ele
 	techStationDuties: ChecklistGroup;
 
 	@property({type: Boolean})
-	audioReady: boolean;
-
-	@property({type: Boolean})
 	recordingsCycled: boolean;
 
 	ready() {
@@ -29,7 +26,6 @@ export default class GDQChecklistElement extends Polymer.MutableData(Polymer.Ele
 			this.extraContent = newVal.extraContent;
 			this.techStationDuties = newVal.techStationDuties;
 			this.stageTechDuties = newVal.stageTechDuties;
-			this.audioReady = newVal.audioEngineerDuties.every(task => task.complete);
 
 			const cycleRecordingsTask = newVal.special.find(task => task.name === 'Cycle Recordings');
 			if (cycleRecordingsTask) {
@@ -51,13 +47,11 @@ export default class GDQChecklistElement extends Polymer.MutableData(Polymer.Ele
 		if (!category) {
 			return;
 		}
-
 		((checklist.value as any)[category] as ChecklistGroup).find(task => {
 			if (task.name === name) {
 				task.complete = Boolean(target.checked);
 				return true;
 			}
-
 			return false;
 		});
 	}

@@ -3,7 +3,10 @@
 <head>
 	<meta charset="UTF-8">
 	<title>Stream Tech Dashboard</title>
+	<script src="../node_modules/tslib/tslib.js"></script>
+
 	<script src="../bower_components/webcomponentsjs/webcomponents-loader.js"></script>
+
 	<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout-classes.html">
 	<link rel="import" href="../bower_components/iron-flex-layout/iron-flex-layout.html">
 	<link rel="import" href="../bower_components/iron-input/iron-input.html">
@@ -18,19 +21,19 @@
 	<link rel="import" href="../shared/style/gdq-text-styles.html">
 	<link rel="import" href="../shared/style/gdq-ui-theme.html">
 
+
+
 	<script>
 		{
 			const links = [
 				'../shared/elements/interfaces/ui-rundown/ui-rundown.html',
 				'elements/gdq-checklist/gdq-checklist.html',
 				'elements/gdq-countdown/gdq-countdown.html',
-				'elements/gdq-fanart/gdq-fanart.html',
 				'elements/gdq-misc-toggles/gdq-misc-toggles.html',
 				'elements/gdq-schedule/gdq-schedule.html',
 				'elements/gdq-timekeeper/gdq-timekeeper.html',
 				'elements/gdq-totals/gdq-totals.html',
 				'elements/gdq-marioscores/gdq-marioscores.html',
-				'elements/gdq-twitter-controls/gdq-twitter-controls.html'
 			];
 			for (const link of links) {
 				const linkElem = document.createElement('link');
@@ -74,19 +77,11 @@
 				border: 1px solid black;
 			}
 
-			gdq-fanart {
-				grid-column: 1;
-				grid-row: 1 / 4;
-			}
 
-			gdq-twitter-controls {
-				grid-column: 2;
-				grid-row: 1;
-			}
 
 			ui-rundown {
-				grid-column: 2;
-				grid-row: 2;
+				grid-column: 1;
+				grid-row: 1/2;
 			}
 
 			gdq-misc-toggles {
@@ -95,7 +90,7 @@
 			}
 
 			#timekeeperAndChecklist {
-				grid-column: 3;
+				grid-column: 2 / 4;
 				grid-row: 1 / 3;
 			}
 
@@ -127,9 +122,8 @@
 <body>
 	<div id="wrapper">
 		<div id="container">
-			<gdq-fanart class="bordered"></gdq-fanart>
 
-			<gdq-twitter-controls class="bordered"></gdq-twitter-controls>
+
 			<ui-rundown class="bordered"></ui-rundown>
 			<gdq-misc-toggles class="bordered"></gdq-misc-toggles>
 

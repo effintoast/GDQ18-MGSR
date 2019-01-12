@@ -7,7 +7,6 @@
 		"types": [
 			"node"
 		],
-
 		// Extra output
 		"declaration": true,
 		"declarationMap": true,

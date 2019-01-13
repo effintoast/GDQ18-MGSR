@@ -36,7 +36,7 @@ const PRODUCTION_URLS = {
     total: trackerUrlFactory(`/${EVENT_ID}?json`)
 };
 function trackerUrlFactory(route) {
-    return `https://${TRACKER_CREDENTIALS_CONFIGURED ? 'private.' : ''}gamesdonequick.com/tracker${route}`;
+    return `http://rtmp.metalgearspeedrunners.com:8000/tracker${route}`;
 }
 let urlsDict = PRODUCTION_URLS;
 if (nodecg.bundleConfig.useMockData) {

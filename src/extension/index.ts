@@ -8,7 +8,7 @@ import * as RequestPromise from 'request-promise-native';
 import * as nodecgApiContext from './util/nodecg-api-context';
 
 const request = RequestPromise.defaults({jar: true}); // <= Automatically saves and re-uses cookies.
-const LOGIN_URL = 'https://private.gamesdonequick.com/tracker/admin/login/';
+const LOGIN_URL = 'http://rtmp.metalgearspeedrunners.com:8000/admin/login/';
 
 let isFirstLogin = true;
 

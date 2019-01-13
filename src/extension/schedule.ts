@@ -220,7 +220,7 @@ async function update() {
 		json: true
 	});
 
-	const adsPromise = TRACKER_CREDENTIALS_CONFIGURED ?
+	const adsPromise = false ?
 		request({
 			uri: GDQUrls.ads,
 			json: true
@@ -323,6 +323,7 @@ async function update() {
 			nodecg.log.warn('[schedule] Permission denied, refreshing session and trying again...');
 			emitter.emit('permissionDenied');
 		} else if (response) {
+			nodecg.log.error('details', response);
 			nodecg.log.error('[schedule] Failed to update, got status code', response.statusCode);
 		} else {
 			nodecg.log.error('[schedule] Failed to update:', actualError);

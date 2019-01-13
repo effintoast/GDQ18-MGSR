@@ -6,7 +6,7 @@ const RequestPromise = require("request-promise-native");
 // Ours
 const nodecgApiContext = require("./util/nodecg-api-context");
 const request = RequestPromise.defaults({ jar: true }); // <= Automatically saves and re-uses cookies.
-const LOGIN_URL = 'https://private.gamesdonequick.com/tracker/admin/login/';
+const LOGIN_URL = 'http://rtmp.metalgearspeedrunners.com:8000/admin/login/';
 let isFirstLogin = true;
 module.exports = (nodecg) => {
     // Store a reference to this nodecg API context in a place where other libs can easily access it.

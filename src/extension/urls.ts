@@ -53,7 +53,7 @@ const PRODUCTION_URLS: IGDQUrls = {
 };
 
 function trackerUrlFactory(route: string) {
-	return `https://${TRACKER_CREDENTIALS_CONFIGURED ? 'private.' : ''}gamesdonequick.com/tracker${route}`;
+	return `http://rtmp.metalgearspeedrunners.com:8000/tracker${route}`;
 }
 
 let urlsDict = PRODUCTION_URLS;

@@ -1,16 +1,11 @@
-var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-  var c = arguments.length,
-      r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-      d;
-  if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-  return c > 3 && r && Object.defineProperty(target, key, r), r;
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-
-import MapSortMixin from "../../../mixins/map-sort-mixin.js";
-const {
-  customElement,
-  property
-} = Polymer.decorators;
+import MapSortMixin from '../../../mixins/map-sort-mixin';
+const { customElement, property } = Polymer.decorators;
 const allPrizesRep = nodecg.Replicant('allPrizes');
 const prizePlaylistRep = nodecg.Replicant('interview:prizePlaylist');
 const prizePlaylistSortMapRep = nodecg.Replicant('interview:prizePlaylistSortMap');
@@ -19,78 +14,65 @@ const prizePlaylistSortMapRep = nodecg.Replicant('interview:prizePlaylistSortMap
  * @polymer
  * @appliesMixin window.MapSortMixin
  */
-
 let DashInterviewMonitorPrizesElement = class DashInterviewMonitorPrizesElement extends MapSortMixin(Polymer.MutableData(Polymer.Element)) {
-  ready() {
-    super.ready();
-    allPrizesRep.on('change', newVal => {
-      if (!newVal || newVal.length === 0) {
-        this.allPrizes = [];
-        return;
-      }
-
-      this.allPrizes = newVal;
-    });
-    prizePlaylistRep.on('change', newVal => {
-      if (!newVal || newVal.length === 0) {
-        this.prizePlaylist = [];
-        return;
-      }
-
-      this.prizePlaylist = newVal;
-    });
-    prizePlaylistSortMapRep.on('change', (newVal, _oldVal, operations) => {
-      if (!newVal) {
-        return;
-      }
-
-      this._sortMapVal = newVal;
-      this.$.repeat.render();
-
-      if (newVal.length > 0 && this._shouldFlash(operations)) {
-        this._flashElementBackground(this);
-      }
-    });
-  }
-
-  _computePlaylistPrizes(allPrizes, prizePlaylist) {
-    if (!allPrizes || allPrizes.length === 0 || !prizePlaylist || prizePlaylist.length === 0) {
-      return [];
+    ready() {
+        super.ready();
+        allPrizesRep.on('change', newVal => {
+            if (!newVal || newVal.length === 0) {
+                this.allPrizes = [];
+                return;
+            }
+            this.allPrizes = newVal;
+        });
+        prizePlaylistRep.on('change', newVal => {
+            if (!newVal || newVal.length === 0) {
+                this.prizePlaylist = [];
+                return;
+            }
+            this.prizePlaylist = newVal;
+        });
+        prizePlaylistSortMapRep.on('change', (newVal, _oldVal, operations) => {
+            if (!newVal) {
+                return;
+            }
+            this._sortMapVal = newVal;
+            this.$.repeat.render();
+            if (newVal.length > 0 && this._shouldFlash(operations)) {
+                this._flashElementBackground(this);
+            }
+        });
     }
-
-    return prizePlaylist.filter(playlistEntry => {
-      return !playlistEntry.complete;
-    }).map(playlistEntry => {
-      return allPrizes.find(prize => {
-        return prize.id === playlistEntry.id;
-      });
-    });
-  }
-
-  _computeNoPlaylistPrizes(playlistPrizes) {
-    return !playlistPrizes || playlistPrizes.length <= 0;
-  }
-
+    _computePlaylistPrizes(allPrizes, prizePlaylist) {
+        if (!allPrizes || allPrizes.length === 0 ||
+            !prizePlaylist || prizePlaylist.length === 0) {
+            return [];
+        }
+        return prizePlaylist.filter(playlistEntry => {
+            return !playlistEntry.complete;
+        }).map(playlistEntry => {
+            return allPrizes.find(prize => {
+                return prize.id === playlistEntry.id;
+            });
+        });
+    }
+    _computeNoPlaylistPrizes(playlistPrizes) {
+        return !playlistPrizes || playlistPrizes.length <= 0;
+    }
 };
-
-__decorate([property({
-  type: Array
-})], DashInterviewMonitorPrizesElement.prototype, "allPrizes", void 0);
-
-__decorate([property({
-  type: Array
-})], DashInterviewMonitorPrizesElement.prototype, "prizePlaylist", void 0);
-
-__decorate([property({
-  type: Array,
-  computed: '_computePlaylistPrizes(allPrizes, prizePlaylist)'
-})], DashInterviewMonitorPrizesElement.prototype, "playlistPrizes", void 0);
-
-__decorate([property({
-  type: Boolean,
-  computed: '_computeNoPlaylistPrizes(playlistPrizes)'
-})], DashInterviewMonitorPrizesElement.prototype, "noPlaylistPrizes", void 0);
-
-DashInterviewMonitorPrizesElement = __decorate([customElement('dash-interview-monitor-prizes')], DashInterviewMonitorPrizesElement);
+__decorate([
+    property({ type: Array })
+], DashInterviewMonitorPrizesElement.prototype, "allPrizes", void 0);
+__decorate([
+    property({ type: Array })
+], DashInterviewMonitorPrizesElement.prototype, "prizePlaylist", void 0);
+__decorate([
+    property({ type: Array, computed: '_computePlaylistPrizes(allPrizes, prizePlaylist)' })
+], DashInterviewMonitorPrizesElement.prototype, "playlistPrizes", void 0);
+__decorate([
+    property({ type: Boolean, computed: '_computeNoPlaylistPrizes(playlistPrizes)' })
+], DashInterviewMonitorPrizesElement.prototype, "noPlaylistPrizes", void 0);
+DashInterviewMonitorPrizesElement = __decorate([
+    customElement('dash-interview-monitor-prizes')
+], DashInterviewMonitorPrizesElement);
 export default DashInterviewMonitorPrizesElement;
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImRhc2gtaW50ZXJ2aWV3LW1vbml0b3ItcHJpemVzLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7O0FBRUEsT0FBTyxZQUFQLE1BQXlCLG1DQUF6QjtBQUVBLE1BQU07QUFBQyxFQUFBLGFBQUQ7QUFBZ0IsRUFBQTtBQUFoQixJQUE0QixPQUFPLENBQUMsVUFBMUM7QUFDQSxNQUFNLFlBQVksR0FBRyxNQUFNLENBQUMsU0FBUCxDQUEwQixXQUExQixDQUFyQjtBQUNBLE1BQU0sZ0JBQWdCLEdBQUcsTUFBTSxDQUFDLFNBQVAsQ0FBMkMseUJBQTNDLENBQXpCO0FBQ0EsTUFBTSx1QkFBdUIsR0FBRyxNQUFNLENBQUMsU0FBUCxDQUEyQixnQ0FBM0IsQ0FBaEM7QUFFQTs7Ozs7O0FBTUEsSUFBcUIsaUNBQWlDLEdBQXRELE1BQXFCLGlDQUFyQixTQUErRCxZQUFZLENBQUMsT0FBTyxDQUFDLFdBQVIsQ0FBb0IsT0FBTyxDQUFDLE9BQTVCLENBQUQsQ0FBM0UsQ0FBaUg7QUFhaEgsRUFBQSxLQUFLLEdBQUE7QUFDSixVQUFNLEtBQU47QUFFQSxJQUFBLFlBQVksQ0FBQyxFQUFiLENBQWdCLFFBQWhCLEVBQTBCLE1BQU0sSUFBRztBQUNsQyxVQUFJLENBQUMsTUFBRCxJQUFXLE1BQU0sQ0FBQyxNQUFQLEtBQWtCLENBQWpDLEVBQW9DO0FBQ25DLGFBQUssU0FBTCxHQUFpQixFQUFqQjtBQUNBO0FBQ0E7O0FBRUQsV0FBSyxTQUFMLEdBQWlCLE1BQWpCO0FBQ0EsS0FQRDtBQVNBLElBQUEsZ0JBQWdCLENBQUMsRUFBakIsQ0FBb0IsUUFBcEIsRUFBOEIsTUFBTSxJQUFHO0FBQ3RDLFVBQUksQ0FBQyxNQUFELElBQVcsTUFBTSxDQUFDLE1BQVAsS0FBa0IsQ0FBakMsRUFBb0M7QUFDbkMsYUFBSyxhQUFMLEdBQXFCLEVBQXJCO0FBQ0E7QUFDQTs7QUFFRCxXQUFLLGFBQUwsR0FBcUIsTUFBckI7QUFDQSxLQVBEO0FBU0EsSUFBQSx1QkFBdUIsQ0FBQyxFQUF4QixDQUEyQixRQUEzQixFQUFxQyxDQUFDLE1BQUQsRUFBUyxPQUFULEVBQWtCLFVBQWxCLEtBQWdDO0FBQ3BFLFVBQUksQ0FBQyxNQUFMLEVBQWE7QUFDWjtBQUNBOztBQUNELFdBQUssV0FBTCxHQUFtQixNQUFuQjtBQUNDLFdBQUssQ0FBTCxDQUFPLE1BQVAsQ0FBb0MsTUFBcEM7O0FBRUQsVUFBSSxNQUFNLENBQUMsTUFBUCxHQUFnQixDQUFoQixJQUFxQixLQUFLLFlBQUwsQ0FBa0IsVUFBbEIsQ0FBekIsRUFBd0Q7QUFDdkQsYUFBSyx1QkFBTCxDQUE2QixJQUE3QjtBQUNBO0FBQ0QsS0FWRDtBQVdBOztBQUVELEVBQUEsc0JBQXNCLENBQUMsU0FBRCxFQUFzQixhQUF0QixFQUE4RDtBQUNuRixRQUFJLENBQUMsU0FBRCxJQUFjLFNBQVMsQ0FBQyxNQUFWLEtBQXFCLENBQW5DLElBQ0gsQ0FBQyxhQURFLElBQ2UsYUFBYSxDQUFDLE1BQWQsS0FBeUIsQ0FENUMsRUFDK0M7QUFDOUMsYUFBTyxFQUFQO0FBQ0E7O0FBRUQsV0FBTyxhQUFhLENBQUMsTUFBZCxDQUFxQixhQUFhLElBQUc7QUFDM0MsYUFBTyxDQUFDLGFBQWEsQ0FBQyxRQUF0QjtBQUNBLEtBRk0sRUFFSixHQUZJLENBRUEsYUFBYSxJQUFHO0FBQ3RCLGFBQU8sU0FBUyxDQUFDLElBQVYsQ0FBZSxLQUFLLElBQUc7QUFDN0IsZUFBTyxLQUFLLENBQUMsRUFBTixLQUFhLGFBQWEsQ0FBQyxFQUFsQztBQUNBLE9BRk0sQ0FBUDtBQUdBLEtBTk0sQ0FBUDtBQU9BOztBQUVELEVBQUEsd0JBQXdCLENBQUMsY0FBRCxFQUF5QjtBQUNoRCxXQUFPLENBQUMsY0FBRCxJQUFtQixjQUFjLENBQUMsTUFBZixJQUF5QixDQUFuRDtBQUNBOztBQWhFK0csQ0FBakg7O0FBRUMsVUFBQSxDQUFBLENBREMsUUFBUSxDQUFDO0FBQUMsRUFBQSxJQUFJLEVBQUU7QUFBUCxDQUFELENBQ1QsQ0FBQSxFLDJDQUFBLEUsV0FBQSxFLEtBQW1CLENBQW5CLENBQUE7O0FBR0EsVUFBQSxDQUFBLENBREMsUUFBUSxDQUFDO0FBQUMsRUFBQSxJQUFJLEVBQUU7QUFBUCxDQUFELENBQ1QsQ0FBQSxFLDJDQUFBLEUsZUFBQSxFLEtBQXdDLENBQXhDLENBQUE7O0FBR0EsVUFBQSxDQUFBLENBREMsUUFBUSxDQUFDO0FBQUMsRUFBQSxJQUFJLEVBQUUsS0FBUDtBQUFjLEVBQUEsUUFBUSxFQUFFO0FBQXhCLENBQUQsQ0FDVCxDQUFBLEUsMkNBQUEsRSxnQkFBQSxFLEtBQXdCLENBQXhCLENBQUE7O0FBR0EsVUFBQSxDQUFBLENBREMsUUFBUSxDQUFDO0FBQUMsRUFBQSxJQUFJLEVBQUUsT0FBUDtBQUFnQixFQUFBLFFBQVEsRUFBRTtBQUExQixDQUFELENBQ1QsQ0FBQSxFLDJDQUFBLEUsa0JBQUEsRSxLQUEwQixDQUExQixDQUFBOztBQVhvQixpQ0FBaUMsR0FBQSxVQUFBLENBQUEsQ0FEckQsYUFBYSxDQUFDLCtCQUFELENBQ3dDLENBQUEsRUFBakMsaUNBQWlDLENBQWpDO2VBQUEsaUMiLCJzb3VyY2VSb290IjoiIn0=
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZGFzaC1pbnRlcnZpZXctbW9uaXRvci1wcml6ZXMuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJkYXNoLWludGVydmlldy1tb25pdG9yLXByaXplcy50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7QUFFQSxPQUFPLFlBQVksTUFBTSxnQ0FBZ0MsQ0FBQztBQUUxRCxNQUFNLEVBQUMsYUFBYSxFQUFFLFFBQVEsRUFBQyxHQUFHLE9BQU8sQ0FBQyxVQUFVLENBQUM7QUFDckQsTUFBTSxZQUFZLEdBQUcsTUFBTSxDQUFDLFNBQVMsQ0FBVSxXQUFXLENBQUMsQ0FBQztBQUM1RCxNQUFNLGdCQUFnQixHQUFHLE1BQU0sQ0FBQyxTQUFTLENBQTJCLHlCQUF5QixDQUFDLENBQUM7QUFDL0YsTUFBTSx1QkFBdUIsR0FBRyxNQUFNLENBQUMsU0FBUyxDQUFXLGdDQUFnQyxDQUFDLENBQUM7QUFFN0Y7Ozs7R0FJRztBQUVILElBQXFCLGlDQUFpQyxHQUF0RCxNQUFxQixpQ0FBa0MsU0FBUSxZQUFZLENBQUMsT0FBTyxDQUFDLFdBQVcsQ0FBQyxPQUFPLENBQUMsT0FBTyxDQUFDLENBQUM7SUFhaEgsS0FBSztRQUNKLEtBQUssQ0FBQyxLQUFLLEVBQUUsQ0FBQztRQUVkLFlBQVksQ0FBQyxFQUFFLENBQUMsUUFBUSxFQUFFLE1BQU0sQ0FBQyxFQUFFO1lBQ2xDLElBQUksQ0FBQyxNQUFNLElBQUksTUFBTSxDQUFDLE1BQU0sS0FBSyxDQUFDLEVBQUU7Z0JBQ25DLElBQUksQ0FBQyxTQUFTLEdBQUcsRUFBRSxDQUFDO2dCQUNwQixPQUFPO2FBQ1A7WUFFRCxJQUFJLENBQUMsU0FBUyxHQUFHLE1BQU0sQ0FBQztRQUN6QixDQUFDLENBQUMsQ0FBQztRQUVILGdCQUFnQixDQUFDLEVBQUUsQ0FBQyxRQUFRLEVBQUUsTUFBTSxDQUFDLEVBQUU7WUFDdEMsSUFBSSxDQUFDLE1BQU0sSUFBSSxNQUFNLENBQUMsTUFBTSxLQUFLLENBQUMsRUFBRTtnQkFDbkMsSUFBSSxDQUFDLGFBQWEsR0FBRyxFQUFFLENBQUM7Z0JBQ3hCLE9BQU87YUFDUDtZQUVELElBQUksQ0FBQyxhQUFhLEdBQUcsTUFBTSxDQUFDO1FBQzdCLENBQUMsQ0FBQyxDQUFDO1FBRUgsdUJBQXVCLENBQUMsRUFBRSxDQUFDLFFBQVEsRUFBRSxDQUFDLE1BQU0sRUFBRSxPQUFPLEVBQUUsVUFBVSxFQUFFLEVBQUU7WUFDcEUsSUFBSSxDQUFDLE1BQU0sRUFBRTtnQkFDWixPQUFPO2FBQ1A7WUFDRCxJQUFJLENBQUMsV0FBVyxHQUFHLE1BQU0sQ0FBQztZQUN6QixJQUFJLENBQUMsQ0FBQyxDQUFDLE1BQTRCLENBQUMsTUFBTSxFQUFFLENBQUM7WUFFOUMsSUFBSSxNQUFNLENBQUMsTUFBTSxHQUFHLENBQUMsSUFBSSxJQUFJLENBQUMsWUFBWSxDQUFDLFVBQVUsQ0FBQyxFQUFFO2dCQUN2RCxJQUFJLENBQUMsdUJBQXVCLENBQUMsSUFBSSxDQUFDLENBQUM7YUFDbkM7UUFDRixDQUFDLENBQUMsQ0FBQztJQUNKLENBQUM7SUFFRCxzQkFBc0IsQ0FBQyxTQUFtQixFQUFFLGFBQXdDO1FBQ25GLElBQUksQ0FBQyxTQUFTLElBQUksU0FBUyxDQUFDLE1BQU0sS0FBSyxDQUFDO1lBQ3ZDLENBQUMsYUFBYSxJQUFJLGFBQWEsQ0FBQyxNQUFNLEtBQUssQ0FBQyxFQUFFO1lBQzlDLE9BQU8sRUFBRSxDQUFDO1NBQ1Y7UUFFRCxPQUFPLGFBQWEsQ0FBQyxNQUFNLENBQUMsYUFBYSxDQUFDLEVBQUU7WUFDM0MsT0FBTyxDQUFDLGFBQWEsQ0FBQyxRQUFRLENBQUM7UUFDaEMsQ0FBQyxDQUFDLENBQUMsR0FBRyxDQUFDLGFBQWEsQ0FBQyxFQUFFO1lBQ3RCLE9BQU8sU0FBUyxDQUFDLElBQUksQ0FBQyxLQUFLLENBQUMsRUFBRTtnQkFDN0IsT0FBTyxLQUFLLENBQUMsRUFBRSxLQUFLLGFBQWEsQ0FBQyxFQUFFLENBQUM7WUFDdEMsQ0FBQyxDQUFDLENBQUM7UUFDSixDQUFDLENBQUMsQ0FBQztJQUNKLENBQUM7SUFFRCx3QkFBd0IsQ0FBQyxjQUF3QjtRQUNoRCxPQUFPLENBQUMsY0FBYyxJQUFJLGNBQWMsQ0FBQyxNQUFNLElBQUksQ0FBQyxDQUFDO0lBQ3RELENBQUM7Q0FDRCxDQUFBO0FBL0RBO0lBREMsUUFBUSxDQUFDLEVBQUMsSUFBSSxFQUFFLEtBQUssRUFBQyxDQUFDO29FQUNMO0FBR25CO0lBREMsUUFBUSxDQUFDLEVBQUMsSUFBSSxFQUFFLEtBQUssRUFBQyxDQUFDO3dFQUNnQjtBQUd4QztJQURDLFFBQVEsQ0FBQyxFQUFDLElBQUksRUFBRSxLQUFLLEVBQUUsUUFBUSxFQUFFLGtEQUFrRCxFQUFDLENBQUM7eUVBQzlEO0FBR3hCO0lBREMsUUFBUSxDQUFDLEVBQUMsSUFBSSxFQUFFLE9BQU8sRUFBRSxRQUFRLEVBQUUsMENBQTBDLEVBQUMsQ0FBQzsyRUFDdEQ7QUFYTixpQ0FBaUM7SUFEckQsYUFBYSxDQUFDLCtCQUErQixDQUFDO0dBQzFCLGlDQUFpQyxDQWlFckQ7ZUFqRW9CLGlDQUFpQyJ9

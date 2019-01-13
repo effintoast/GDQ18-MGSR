@@ -1,128 +1,106 @@
-var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-  var c = arguments.length,
-      r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-      d;
-  if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-  return c > 3 && r && Object.defineProperty(target, key, r), r;
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-
-const {
-  customElement,
-  property
-} = Polymer.decorators;
+const { customElement, property } = Polymer.decorators;
 const questionSortMapRep = nodecg.Replicant('interview:questionSortMap');
 /**
  * @customElement
  * @polymer
  * @appliesMixin Polymer.MutableData
  */
-
 let DashInterviewLightningRoundTweetElement = class DashInterviewLightningRoundTweetElement extends Polymer.MutableData(Polymer.Element) {
-  /**
-   * @customElement
-   * @polymer
-   * @appliesMixin Polymer.MutableData
-   */
-  constructor() {
-    super(...arguments);
-    this._initialized = false;
-  }
-
-  connectedCallback() {
-    super.connectedCallback();
-
-    if (!this._initialized) {
-      this._initialized = true;
-      questionSortMapRep.on('change', newVal => {
-        this._questionSortMap = newVal;
-      });
+    /**
+     * @customElement
+     * @polymer
+     * @appliesMixin Polymer.MutableData
+     */
+    constructor() {
+        super(...arguments);
+        this._initialized = false;
     }
-  }
-
-  promote() {
-    if (!this.tweet) {
-      return;
+    connectedCallback() {
+        super.connectedCallback();
+        if (!this._initialized) {
+            this._initialized = true;
+            questionSortMapRep.on('change', newVal => {
+                this._questionSortMap = newVal;
+            });
+        }
     }
-
-    const button = this.$.promote;
-    button.disabled = true;
-    nodecg.sendMessage('interview:promoteQuestionToTop', this.tweet.id_str, error => {
-      button.disabled = false;
-
-      if (error) {
-        this.dispatchEvent(new CustomEvent('error-toast', {
-          detail: {
-            text: 'Failed to promote interview question.'
-          },
-          bubbles: true,
-          composed: true
-        }));
-      }
-    });
-  }
-
-  reject() {
-    if (!this.tweet) {
-      return;
+    promote() {
+        if (!this.tweet) {
+            return;
+        }
+        const button = this.$.promote;
+        button.disabled = true;
+        nodecg.sendMessage('interview:promoteQuestionToTop', this.tweet.id_str, error => {
+            button.disabled = false;
+            if (error) {
+                this.dispatchEvent(new CustomEvent('error-toast', {
+                    detail: {
+                        text: 'Failed to promote interview question.'
+                    },
+                    bubbles: true,
+                    composed: true
+                }));
+            }
+        });
     }
-
-    const button = this.$.reject;
-    button.disabled = true;
-    nodecg.sendMessage('interview:markQuestionAsDone', this.tweet.id_str, error => {
-      button.disabled = false;
-
-      if (error) {
-        this.dispatchEvent(new CustomEvent('error-toast', {
-          detail: {
-            text: 'Failed to reject interview question.'
-          },
-          bubbles: true,
-          composed: true
-        }));
-      }
-    });
-  }
-
-  _computeTweetId(prizeId) {
-    return prizeId;
-  }
-
-  _computeFirst(tweet, questionSortMap) {
-    if (!tweet || !Array.isArray(questionSortMap)) {
-      return;
+    reject() {
+        if (!this.tweet) {
+            return;
+        }
+        const button = this.$.reject;
+        button.disabled = true;
+        nodecg.sendMessage('interview:markQuestionAsDone', this.tweet.id_str, error => {
+            button.disabled = false;
+            if (error) {
+                this.dispatchEvent(new CustomEvent('error-toast', {
+                    detail: {
+                        text: 'Failed to reject interview question.'
+                    },
+                    bubbles: true,
+                    composed: true
+                }));
+            }
+        });
     }
-
-    const sortMapIndex = questionSortMap.findIndex(entry => entry === this.tweet.id_str);
-    return sortMapIndex === 0;
-  }
-
-  _firstChanged(newVal) {
-    this.parentNode.host.style.backgroundColor = newVal ? '#BDE7C4' : '';
-  }
-
+    _computeTweetId(prizeId) {
+        return prizeId;
+    }
+    _computeFirst(tweet, questionSortMap) {
+        if (!tweet || !Array.isArray(questionSortMap)) {
+            return;
+        }
+        const sortMapIndex = questionSortMap.findIndex(entry => entry === this.tweet.id_str);
+        return sortMapIndex === 0;
+    }
+    _firstChanged(newVal) {
+        this.parentNode.host.style.backgroundColor = newVal ? '#BDE7C4' : '';
+    }
 };
-
-__decorate([property({
-  type: Object
-})], DashInterviewLightningRoundTweetElement.prototype, "tweet", void 0);
-
-__decorate([property({
-  type: String,
-  reflectToAttribute: true,
-  computed: '_computeTweetId(tweet.id_str)'
-})], DashInterviewLightningRoundTweetElement.prototype, "tweetId", void 0);
-
-__decorate([property({
-  type: Boolean,
-  reflectToAttribute: true,
-  computed: '_computeFirst(tweet, _questionSortMap)',
-  observer: '_firstChanged'
-})], DashInterviewLightningRoundTweetElement.prototype, "first", void 0);
-
-__decorate([property({
-  type: Array
-})], DashInterviewLightningRoundTweetElement.prototype, "_questionSortMap", void 0);
-
-DashInterviewLightningRoundTweetElement = __decorate([customElement('dash-interview-lightning-round-tweet')], DashInterviewLightningRoundTweetElement);
+__decorate([
+    property({ type: Object })
+], DashInterviewLightningRoundTweetElement.prototype, "tweet", void 0);
+__decorate([
+    property({ type: String, reflectToAttribute: true, computed: '_computeTweetId(tweet.id_str)' })
+], DashInterviewLightningRoundTweetElement.prototype, "tweetId", void 0);
+__decorate([
+    property({
+        type: Boolean,
+        reflectToAttribute: true,
+        computed: '_computeFirst(tweet, _questionSortMap)',
+        observer: '_firstChanged'
+    })
+], DashInterviewLightningRoundTweetElement.prototype, "first", void 0);
+__decorate([
+    property({ type: Array })
+], DashInterviewLightningRoundTweetElement.prototype, "_questionSortMap", void 0);
+DashInterviewLightningRoundTweetElement = __decorate([
+    customElement('dash-interview-lightning-round-tweet')
+], DashInterviewLightningRoundTweetElement);
 export default DashInterviewLightningRoundTweetElement;
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImRhc2gtaW50ZXJ2aWV3LWxpZ2h0bmluZy1yb3VuZC10d2VldC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7OztBQUdBLE1BQU07QUFBQyxFQUFBLGFBQUQ7QUFBZ0IsRUFBQTtBQUFoQixJQUE0QixPQUFPLENBQUMsVUFBMUM7QUFDQSxNQUFNLGtCQUFrQixHQUFHLE1BQU0sQ0FBQyxTQUFQLENBQTZDLDJCQUE3QyxDQUEzQjtBQUVBOzs7Ozs7QUFNQSxJQUFxQix1Q0FBdUMsR0FBNUQsTUFBcUIsdUNBQXJCLFNBQXFFLE9BQU8sQ0FBQyxXQUFSLENBQW9CLE9BQU8sQ0FBQyxPQUE1QixDQUFyRSxDQUF5RztBQU56Rzs7Ozs7QUFLQSxFQUFBLFdBQUEsR0FBQTs7QUFtQlMsU0FBQSxZQUFBLEdBQWUsS0FBZjtBQXVFUjs7QUFyRUEsRUFBQSxpQkFBaUIsR0FBQTtBQUNoQixVQUFNLGlCQUFOOztBQUVBLFFBQUksQ0FBQyxLQUFLLFlBQVYsRUFBd0I7QUFDdkIsV0FBSyxZQUFMLEdBQW9CLElBQXBCO0FBQ0EsTUFBQSxrQkFBa0IsQ0FBQyxFQUFuQixDQUFzQixRQUF0QixFQUFnQyxNQUFNLElBQUc7QUFDeEMsYUFBSyxnQkFBTCxHQUF3QixNQUF4QjtBQUNBLE9BRkQ7QUFHQTtBQUNEOztBQUVELEVBQUEsT0FBTyxHQUFBO0FBQ04sUUFBSSxDQUFDLEtBQUssS0FBVixFQUFpQjtBQUNoQjtBQUNBOztBQUVELFVBQU0sTUFBTSxHQUFHLEtBQUssQ0FBTCxDQUFPLE9BQXRCO0FBQ0EsSUFBQSxNQUFNLENBQUMsUUFBUCxHQUFrQixJQUFsQjtBQUNBLElBQUEsTUFBTSxDQUFDLFdBQVAsQ0FBbUIsZ0NBQW5CLEVBQXFELEtBQUssS0FBTCxDQUFXLE1BQWhFLEVBQXdFLEtBQUssSUFBRztBQUMvRSxNQUFBLE1BQU0sQ0FBQyxRQUFQLEdBQWtCLEtBQWxCOztBQUNBLFVBQUksS0FBSixFQUFXO0FBQ1YsYUFBSyxhQUFMLENBQW1CLElBQUksV0FB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
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZGFzaC1pbnRlcnZpZXctbGlnaHRuaW5nLXJvdW5kLXR3ZWV0LmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiZGFzaC1pbnRlcnZpZXctbGlnaHRuaW5nLXJvdW5kLXR3ZWV0LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7OztBQUdBLE1BQU0sRUFBQyxhQUFhLEVBQUUsUUFBUSxFQUFDLEdBQUcsT0FBTyxDQUFDLFVBQVUsQ0FBQztBQUNyRCxNQUFNLGtCQUFrQixHQUFHLE1BQU0sQ0FBQyxTQUFTLENBQTZCLDJCQUEyQixDQUFDLENBQUM7QUFFckc7Ozs7R0FJRztBQUVILElBQXFCLHVDQUF1QyxHQUE1RCxNQUFxQix1Q0FBd0MsU0FBUSxPQUFPLENBQUMsV0FBVyxDQUFDLE9BQU8sQ0FBQyxPQUFPLENBQUM7SUFOekc7Ozs7T0FJRztJQUNIOztRQW1CUyxpQkFBWSxHQUFHLEtBQUssQ0FBQztJQXVFOUIsQ0FBQztJQXJFQSxpQkFBaUI7UUFDaEIsS0FBSyxDQUFDLGlCQUFpQixFQUFFLENBQUM7UUFFMUIsSUFBSSxDQUFDLElBQUksQ0FBQyxZQUFZLEVBQUU7WUFDdkIsSUFBSSxDQUFDLFlBQVksR0FBRyxJQUFJLENBQUM7WUFDekIsa0JBQWtCLENBQUMsRUFBRSxDQUFDLFFBQVEsRUFBRSxNQUFNLENBQUMsRUFBRTtnQkFDeEMsSUFBSSxDQUFDLGdCQUFnQixHQUFHLE1BQU0sQ0FBQztZQUNoQyxDQUFDLENBQUMsQ0FBQztTQUNIO0lBQ0YsQ0FBQztJQUVELE9BQU87UUFDTixJQUFJLENBQUMsSUFBSSxDQUFDLEtBQUssRUFBRTtZQUNoQixPQUFPO1NBQ1A7UUFFRCxNQUFNLE1BQU0sR0FBRyxJQUFJLENBQUMsQ0FBQyxDQUFDLE9BQTZCLENBQUM7UUFDcEQsTUFBTSxDQUFDLFFBQVEsR0FBRyxJQUFJLENBQUM7UUFDdkIsTUFBTSxDQUFDLFdBQVcsQ0FBQyxnQ0FBZ0MsRUFBRSxJQUFJLENBQUMsS0FBSyxDQUFDLE1BQU0sRUFBRSxLQUFLLENBQUMsRUFBRTtZQUMvRSxNQUFNLENBQUMsUUFBUSxHQUFHLEtBQUssQ0FBQztZQUN4QixJQUFJLEtBQUssRUFBRTtnQkFDVixJQUFJLENBQUMsYUFBYSxDQUFDLElBQUksV0FBVyxDQUFDLGFBQWEsRUFBRTtvQkFDakQsTUFBTSxFQUFFO3dCQUNQLElBQUksRUFBRSx1Q0FBdUM7cUJBQzdDO29CQUNELE9BQU8sRUFBRSxJQUFJO29CQUNiLFFBQVEsRUFBRSxJQUFJO2lCQUNkLENBQUMsQ0FBQyxDQUFDO2FBQ0o7UUFDRixDQUFDLENBQUMsQ0FBQztJQUNKLENBQUM7SUFFRCxNQUFNO1FBQ0wsSUFBSSxDQUFDLElBQUksQ0FBQyxLQUFLLEVBQUU7WUFDaEIsT0FBTztTQUNQO1FBRUQsTUFBTSxNQUFNLEdBQUcsSUFBSSxDQUFDLENBQUMsQ0FBQyxNQUE0QixDQUFDO1FBQ25ELE1BQU0sQ0FBQyxRQUFRLEdBQUcsSUFBSSxDQUFDO1FBQ3ZCLE1BQU0sQ0FBQyxXQUFXLENBQUMsOEJBQThCLEVBQUUsSUFBSSxDQUFDLEtBQUssQ0FBQyxNQUFNLEVBQUUsS0FBSyxDQUFDLEVBQUU7WUFDN0UsTUFBTSxDQUFDLFFBQVEsR0FBRyxLQUFLLENBQUM7WUFDeEIsSUFBSSxLQUFLLEVBQUU7Z0JBQ1YsSUFBSSxDQUFDLGFBQWEsQ0FBQyxJQUFJLFdBQVcsQ0FBQyxhQUFhLEVBQUU7b0JBQ2pELE1BQU0sRUFBRTt3QkFDUCxJQUFJLEVBQUUsc0NBQXNDO3FCQUM1QztvQkFDRCxPQUFPLEVBQUUsSUFBSTtvQkFDYixRQUFRLEVBQUUsSUFBSTtpQkFDZCxDQUFDLENBQUMsQ0FBQzthQUNKO1FBQ0YsQ0FBQyxDQUFDLENBQUM7SUFDSixDQUFDO0lBRUQsZUFBZSxDQUFDLE9BQWU7UUFDOUIsT0FBTyxPQUFPLENBQUM7SUFDaEIsQ0FBQztJQUVELGFBQWEsQ0FBQyxLQUFhLEVBQUUsZUFBNEM7UUFDeEUsSUFBSSxDQUFDLEtBQUssSUFBSSxDQUFDLEtBQUssQ0FBQyxPQUFPLENBQUMsZUFBZSxDQUFDLEVBQUU7WUFDOUMsT0FBTztTQUNQO1FBRUQsTUFBTSxZQUFZLEdBQUcsZUFBZSxDQUFDLFNBQVMsQ0FBQyxLQUFLLENBQUMsRUFBRSxDQUFDLEtBQUssS0FBSyxJQUFJLENBQUMsS0FBSyxDQUFDLE1BQU0sQ0FBQyxDQUFDO1FBQ3JGLE9BQU8sWUFBWSxLQUFLLENBQUMsQ0FBQztJQUMzQixDQUFDO0lBRUQsYUFBYSxDQUFDLE1BQWU7UUFDM0IsSUFBWSxDQUFDLFVBQVUsQ0FBQyxJQUFJLENBQUMsS0FBSyxDQUFDLGVBQWUsR0FBRyxNQUFNLENBQUMsQ0FBQyxDQUFDLFNBQVMsQ0FBQyxDQUFDLENBQUMsRUFBRSxDQUFDO0lBQy9FLENBQUM7Q0FDRCxDQUFBO0FBdkZBO0lBREMsUUFBUSxDQUFDLEVBQUMsSUFBSSxFQUFFLE1BQU0sRUFBQyxDQUFDO3NFQUNaO0FBR2I7SUFEQyxRQUFRLENBQUMsRUFBQyxJQUFJLEVBQUUsTUFBTSxFQUFFLGtCQUFrQixFQUFFLElBQUksRUFBRSxRQUFRLEVBQUUsK0JBQStCLEVBQUMsQ0FBQzt3RUFDOUU7QUFRaEI7SUFOQyxRQUFRLENBQUM7UUFDVCxJQUFJLEVBQUUsT0FBTztRQUNiLGtCQUFrQixFQUFFLElBQUk7UUFDeEIsUUFBUSxFQUFFLHdDQUF3QztRQUNsRCxRQUFRLEVBQUUsZUFBZTtLQUN6QixDQUFDO3NFQUNhO0FBR2Y7SUFEQyxRQUFRLENBQUMsRUFBQyxJQUFJLEVBQUUsS0FBSyxFQUFDLENBQUM7aUZBQ3FCO0FBaEJ6Qix1Q0FBdUM7SUFEM0QsYUFBYSxDQUFDLHNDQUFzQyxDQUFDO0dBQ2pDLHVDQUF1QyxDQXlGM0Q7ZUF6Rm9CLHVDQUF1QyJ9

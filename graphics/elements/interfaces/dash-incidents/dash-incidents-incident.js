@@ -1,99 +1,80 @@
-var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
-  var c = arguments.length,
-      r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
-      d;
-  if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-  return c > 3 && r && Object.defineProperty(target, key, r), r;
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-
-const {
-  customElement,
-  property
-} = Polymer.decorators;
+const { customElement, property } = Polymer.decorators;
 /**
  * @customElement
  * @polymer
  */
-
 let DashIncidentsIncidentElement = class DashIncidentsIncidentElement extends Polymer.Element {
-  _computeCurrentPhase() {
-    return this.incident ? this.incident.currentPhase.toLowerCase() : 'unknown';
-  }
-
-  _calcFormattedPageTarget(incident) {
-    if (!incident) {
-      return '';
+    _computeCurrentPhase() {
+        return this.incident ? this.incident.currentPhase.toLowerCase() : 'unknown';
     }
-
-    let targetStr = this._parsePageTargets(incident);
-
-    if (incident.currentPhase.toLowerCase() === 'unacked') {
-      targetStr = `PAGING: ${targetStr}`;
-    } else if (incident.currentPhase.toLowerCase() === 'acked') {
-      targetStr = incident.transitions.filter(transition => {
-        return transition.name.toLowerCase() === 'acked';
-      }).map(transition => {
-        return transition.by;
-      }).join(', ');
-    } else if (incident.currentPhase.toLowerCase() === 'resolved') {
-      targetStr = incident.transitions.filter(transition => {
-        return transition.name.toLowerCase() === 'resolved';
-      }).map(transition => {
-        return transition.by;
-      }).join(', ');
+    _calcFormattedPageTarget(incident) {
+        if (!incident) {
+            return '';
+        }
+        let targetStr = this._parsePageTargets(incident);
+        if (incident.currentPhase.toLowerCase() === 'unacked') {
+            targetStr = `PAGING: ${targetStr}`;
+        }
+        else if (incident.currentPhase.toLowerCase() === 'acked') {
+            targetStr = incident.transitions.filter(transition => {
+                return transition.name.toLowerCase() === 'acked';
+            }).map(transition => {
+                return transition.by;
+            }).join(', ');
+        }
+        else if (incident.currentPhase.toLowerCase() === 'resolved') {
+            targetStr = incident.transitions.filter(transition => {
+                return transition.name.toLowerCase() === 'resolved';
+            }).map(transition => {
+                return transition.by;
+            }).join(', ');
+        }
+        return targetStr;
     }
-
-    return targetStr;
-  }
-
-  _parsePageTargets(incident) {
-    if (!incident) {
-      return '';
+    _parsePageTargets(incident) {
+        if (!incident) {
+            return '';
+        }
+        if (incident.pagedUsers && incident.pagedUsers.length > 0) {
+            return incident.pagedUsers.join(', ');
+        }
+        return 'NOBODY - TRY SLACK';
     }
-
-    if (incident.pagedUsers && incident.pagedUsers.length > 0) {
-      return incident.pagedUsers.join(', ');
+    _formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleString('en-US', {
+            day: 'numeric',
+            month: 'numeric',
+            year: '2-digit',
+            hour12: true,
+            hour: 'numeric',
+            minute: '2-digit'
+        });
     }
-
-    return 'NOBODY - TRY SLACK';
-  }
-
-  _formatDate(dateString) {
-    const date = new Date(dateString);
-    return date.toLocaleString('en-US', {
-      day: 'numeric',
-      month: 'numeric',
-      year: '2-digit',
-      hour12: true,
-      hour: 'numeric',
-      minute: '2-digit'
-    });
-  }
-
-  _calcStatusText(currentPhase) {
-    if (currentPhase.toLowerCase() === 'acked') {
-      return 'ACKED BY:';
+    _calcStatusText(currentPhase) {
+        if (currentPhase.toLowerCase() === 'acked') {
+            return 'ACKED BY:';
+        }
+        if (currentPhase.toLowerCase() === 'resolved') {
+            return 'RESOLVED BY:';
+        }
+        return currentPhase;
     }
-
-    if (currentPhase.toLowerCase() === 'resolved') {
-      return 'RESOLVED BY:';
-    }
-
-    return currentPhase;
-  }
-
 };
-
-__decorate([property({
-  type: Object
-})], DashIncidentsIncidentElement.prototype, "incident", void 0);
-
-__decorate([property({
-  type: String,
-  reflectToAttribute: true,
-  computed: '_computeCurrentPhase(incident.*)'
-})], DashIncidentsIncidentElement.prototype, "currentPhase", void 0);
-
-DashIncidentsIncidentElement = __decorate([customElement('dash-incidents-incident')], DashIncidentsIncidentElement);
+__decorate([
+    property({ type: Object })
+], DashIncidentsIncidentElement.prototype, "incident", void 0);
+__decorate([
+    property({ type: String, reflectToAttribute: true, computed: '_computeCurrentPhase(incident.*)' })
+], DashIncidentsIncidentElement.prototype, "currentPhase", void 0);
+DashIncidentsIncidentElement = __decorate([
+    customElement('dash-incidents-incident')
+], DashIncidentsIncidentElement);
 export default DashIncidentsIncidentElement;
-//# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbImRhc2gtaW5jaWRlbnRzLWluY2lkZW50LnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiI7Ozs7Ozs7O0FBRUEsTUFBTTtBQUFDLEVBQUEsYUFBRDtBQUFnQixFQUFBO0FBQWhCLElBQTRCLE9BQU8sQ0FBQyxVQUExQztBQUVBOzs7OztBQUtBLElBQXFCLDRCQUE0QixHQUFqRCxNQUFxQiw0QkFBckIsU0FBMEQsT0FBTyxDQUFDLE9BQWxFLENBQXlFO0FBT3hFLEVBQUEsb0JBQW9CLEdBQUE7QUFDbkIsV0FBTyxLQUFLLFFBQUwsR0FBZ0IsS0FBSyxRQUFMLENBQWMsWUFBZCxDQUEyQixXQUEzQixFQUFoQixHQUEyRCxTQUFsRTtBQUNBOztBQUVELEVBQUEsd0JBQXdCLENBQUMsUUFBRCxFQUFtQjtBQUMxQyxRQUFJLENBQUMsUUFBTCxFQUFlO0FBQ2QsYUFBTyxFQUFQO0FBQ0E7O0FBRUQsUUFBSSxTQUFTLEdBQUcsS0FBSyxpQkFBTCxDQUF1QixRQUF2QixDQUFoQjs7QUFDQSxRQUFJLFFBQVEsQ0FBQyxZQUFULENBQXNCLFdBQXRCLE9BQXdDLFNBQTVDLEVBQXVEO0FBQ3RELE1BQUEsU0FBUyxHQUFHLFdBQVcsU0FBUyxFQUFoQztBQUNBLEtBRkQsTUFFTyxJQUFJLFFBQVEsQ0FBQyxZQUFULENBQXNCLFdBQXRCLE9BQXdDLE9BQTVDLEVBQXFEO0FBQzNELE1BQUEsU0FBUyxHQUFHLFFBQVEsQ0FBQyxXQUFULENBQXFCLE1BQXJCLENBQTRCLFVBQVUsSUFBRztBQUNwRCxlQUFPLFVBQVUsQ0FBQyxJQUFYLENBQWdCLFdBQWhCLE9BQWtDLE9BQXpDO0FBQ0EsT0FGVyxFQUVULEdBRlMsQ0FFTCxVQUFVLElBQUc7QUFDbkIsZUFBTyxVQUFVLENBQUMsRUFBbEI7QUFDQSxPQUpXLEVBSVQsSUFKUyxDQUlKLElBSkksQ0FBWjtBQUtBLEtBTk0sTUFNQSxJQUFJLFFBQVEsQ0FBQyxZQUFULENBQXNCLFdBQXRCLE9BQXdDLFVBQTVDLEVBQXdEO0FBQzlELE1BQUEsU0FBUyxHQUFHLFFBQVEsQ0FBQyxXQUFULENBQXFCLE1BQXJCLENBQTRCLFVBQVUsSUFBRztBQUNwRCxlQUFPLFVBQVUsQ0FBQyxJQUFYLENBQWdCLFdBQWhCLE9BQWtDLFVBQXpDO0FBQ0EsT0FGVyxFQUVULEdBRlMsQ0FFTCxVQUFVLElBQUc7QUFDbkIsZUFBTyxVQUFVLENBQUMsRUFBbEI7QUFDQSxPQUpXLEVBSVQsSUFKUyxDQUlKLElBSkksQ0FBWjtBQUtBOztBQUVELFdBQU8sU0FBUDtBQUNBOztBQUVELEVBQUEsaUJBQWlCLENBQUMsUUFBRCxFQUFtQjtBQUNuQyxRQUFJLENBQUMsUUFBTCxFQUFlO0FBQ2QsYUFBTyxFQUFQO0FBQ0E7O0FBRUQsUUFBSSxRQUFRLENBQUMsVUFBVCxJQUF1QixRQUFRLENBQUMsVUFBVCxDQUFvQixNQUFwQixHQUE2QixDQUF4RCxFQUEyRDtBQUMxRCxhQUFPLFFBQVEsQ0FBQyxVQUFULENBQW9CLElBQXBCLENBQXlCLElBQXpCLENBQVA7QUFDQTs7QUFFRCxXQUFPLG9CQUFQO0FBQ0E7O0FBRUQsRUFBQSxXQUFXLENBQUMsVUFBRCxFQUFtQjtBQUM3QixVQUFNLElBQUksR0FBRyxJQUFJLElBQUosQ0FBUyxVQUFULENBQWI7QUFDQSxXQUFPLElBQUksQ0FBQyxjQUFMLENBQW9CLE9BQXBCLEVBQTZCO0FBQ25DLE1BQUEsR0FBRyxFQUFFLFNBRDhCO0FBRW5DLE1BQUEsS0FBSyxFQUFFLFNBRjRCO0FBR25DLE1BQUEsSUFBSSxFQUFFLFNBSDZCO0FBSW5DLE1BQUEsTUFBTSxFQUFFLElBSjJCO0FBS25DLE1BQUEsSUFBSSxFQUFFLFNBTDZCO0FBTW5DLE1BQUEsTUFBTSxFQUFFO0FBTjJCLEtBQTdCLENBQVA7QUFRQTs7QUFFRCxFQUFBLGVBQWUsQ0FBQyxZQUFELEVBQXFCO0FBQ25DLFFBQUksWUFBWSxDQUFDLFdBQWIsT0FBK0IsT0FBbkMsRUFBNEM7QUFDM0MsYUFBTyxXQUFQO0FBQ0E7O0FBRUQsUUFBSSxZQUFZLENBQUMsV0FBYixPQUErQixVQUFuQyxFQUErQztBQUM5QyxhQUFPLGNBQVA7QUFDQTs7QUFFRCxXQUFPLFlBQVA7QUFDQTs7QUF0RXVFLENBQXpFOztBQUVDLFVBQUEsQ0FBQSxDQURDLFFBQVEsQ0FBQztBQUFDLEVBQUEsSUFBSSxFQUFFO0FBQVAsQ0FBRCxDQUNULENBQUEsRSxzQ0FBQSxFLFVBQUEsRSxLQUFtQixDQUFuQixDQUFBOztBQUdBLFVBQUEsQ0FBQSxDQURDLFFBQVEsQ0FBQztBQUFDLEVBQUEsSUFBSSxFQUFFLE1BQVA7QUFBZSxFQUFBLGtCQUFrQixFQUFFLElBQW5DO0FBQXlDLEVBQUEsUUFBUSxFQUFFO0FBQW5ELENBQUQsQ0FDVCxDQUFBLEUsc0NBQUEsRSxjQUFBLEUsS0FBcUIsQ0FBckIsQ0FBQTs7QUFMb0IsNEJBQTRCLEdBQUEsVUFBQSxDQUFBLENBRGhELGFBQWEsQ0FBQyx5QkFBRCxDQUNtQyxDQUFBLEVBQTVCLDRCQUE0QixDQUE1QjtlQUFBLDRCIiwic291cmNlUm9vdCI6IiJ9
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiZGFzaC1pbmNpZGVudHMtaW5jaWRlbnQuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyJkYXNoLWluY2lkZW50cy1pbmNpZGVudC50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiOzs7Ozs7QUFFQSxNQUFNLEVBQUMsYUFBYSxFQUFFLFFBQVEsRUFBQyxHQUFHLE9BQU8sQ0FBQyxVQUFVLENBQUM7QUFFckQ7OztHQUdHO0FBRUgsSUFBcUIsNEJBQTRCLEdBQWpELE1BQXFCLDRCQUE2QixTQUFRLE9BQU8sQ0FBQyxPQUFPO0lBT3hFLG9CQUFvQjtRQUNuQixPQUFPLElBQUksQ0FBQyxRQUFRLENBQUMsQ0FBQyxDQUFDLElBQUksQ0FBQyxRQUFRLENBQUMsWUFBWSxDQUFDLFdBQVcsRUFBRSxDQUFDLENBQUMsQ0FBQyxTQUFTLENBQUM7SUFDN0UsQ0FBQztJQUVELHdCQUF3QixDQUFDLFFBQWtCO1FBQzFDLElBQUksQ0FBQyxRQUFRLEVBQUU7WUFDZCxPQUFPLEVBQUUsQ0FBQztTQUNWO1FBRUQsSUFBSSxTQUFTLEdBQUcsSUFBSSxDQUFDLGlCQUFpQixDQUFDLFFBQVEsQ0FBQyxDQUFDO1FBQ2pELElBQUksUUFBUSxDQUFDLFlBQVksQ0FBQyxXQUFXLEVBQUUsS0FBSyxTQUFTLEVBQUU7WUFDdEQsU0FBUyxHQUFHLFdBQVcsU0FBUyxFQUFFLENBQUM7U0FDbkM7YUFBTSxJQUFJLFFBQVEsQ0FBQyxZQUFZLENBQUMsV0FBVyxFQUFFLEtBQUssT0FBTyxFQUFFO1lBQzNELFNBQVMsR0FBRyxRQUFRLENBQUMsV0FBVyxDQUFDLE1BQU0sQ0FBQyxVQUFVLENBQUMsRUFBRTtnQkFDcEQsT0FBTyxVQUFVLENBQUMsSUFBSSxDQUFDLFdBQVcsRUFBRSxLQUFLLE9BQU8sQ0FBQztZQUNsRCxDQUFDLENBQUMsQ0FBQyxHQUFHLENBQUMsVUFBVSxDQUFDLEVBQUU7Z0JBQ25CLE9BQU8sVUFBVSxDQUFDLEVBQUUsQ0FBQztZQUN0QixDQUFDLENBQUMsQ0FBQyxJQUFJLENBQUMsSUFBSSxDQUFDLENBQUM7U0FDZDthQUFNLElBQUksUUFBUSxDQUFDLFlBQVksQ0FBQyxXQUFXLEVBQUUsS0FBSyxVQUFVLEVBQUU7WUFDOUQsU0FBUyxHQUFHLFFBQVEsQ0FBQyxXQUFXLENBQUMsTUFBTSxDQUFDLFVBQVUsQ0FBQyxFQUFFO2dCQUNwRCxPQUFPLFVBQVUsQ0FBQyxJQUFJLENBQUMsV0FBVyxFQUFFLEtBQUssVUFBVSxDQUFDO1lBQ3JELENBQUMsQ0FBQyxDQUFDLEdBQUcsQ0FBQyxVQUFVLENBQUMsRUFBRTtnQkFDbkIsT0FBTyxVQUFVLENBQUMsRUFBRSxDQUFDO1lBQ3RCLENBQUMsQ0FBQyxDQUFDLElBQUksQ0FBQyxJQUFJLENBQUMsQ0FBQztTQUNkO1FBRUQsT0FBTyxTQUFTLENBQUM7SUFDbEIsQ0FBQztJQUVELGlCQUFpQixDQUFDLFFBQWtCO1FBQ25DLElBQUksQ0FBQyxRQUFRLEVBQUU7WUFDZCxPQUFPLEVBQUUsQ0FBQztTQUNWO1FBRUQsSUFBSSxRQUFRLENBQUMsVUFBVSxJQUFJLFFBQVEsQ0FBQyxVQUFVLENBQUMsTUFBTSxHQUFHLENBQUMsRUFBRTtZQUMxRCxPQUFPLFFBQVEsQ0FBQyxVQUFVLENBQUMsSUFBSSxDQUFDLElBQUksQ0FBQyxDQUFDO1NBQ3RDO1FBRUQsT0FBTyxvQkFBb0IsQ0FBQztJQUM3QixDQUFDO0lBRUQsV0FBVyxDQUFDLFVBQWtCO1FBQzdCLE1BQU0sSUFBSSxHQUFHLElBQUksSUFBSSxDQUFDLFVBQVUsQ0FBQyxDQUFDO1FBQ2xDLE9BQU8sSUFBSSxDQUFDLGNBQWMsQ0FBQyxPQUFPLEVBQUU7WUFDbkMsR0FBRyxFQUFFLFNBQVM7WUFDZCxLQUFLLEVBQUUsU0FBUztZQUNoQixJQUFJLEVBQUUsU0FBUztZQUNmLE1BQU0sRUFBRSxJQUFJO1lBQ1osSUFBSSxFQUFFLFNBQVM7WUFDZixNQUFNLEVBQUUsU0FBUztTQUNqQixDQUFDLENBQUM7SUFDSixDQUFDO0lBRUQsZUFBZSxDQUFDLFlBQW9CO1FBQ25DLElBQUksWUFBWSxDQUFDLFdBQVcsRUFBRSxLQUFLLE9BQU8sRUFBRTtZQUMzQyxPQUFPLFdBQVcsQ0FBQztTQUNuQjtRQUVELElBQUksWUFBWSxDQUFDLFdBQVcsRUFBRSxLQUFLLFVBQVUsRUFBRTtZQUM5QyxPQUFPLGNBQWMsQ0FBQztTQUN0QjtRQUVELE9BQU8sWUFBWSxDQUFDO0lBQ3JCLENBQUM7Q0FDRCxDQUFBO0FBckVBO0lBREMsUUFBUSxDQUFDLEVBQUMsSUFBSSxFQUFFLE1BQU0sRUFBQyxDQUFDOzhEQUNOO0FBR25CO0lBREMsUUFBUSxDQUFDLEVBQUMsSUFBSSxFQUFFLE1BQU0sRUFBRSxrQkFBa0IsRUFBRSxJQUFJLEVBQUUsUUFBUSxFQUFFLGtDQUFrQyxFQUFDLENBQUM7a0VBQzVFO0FBTEQsNEJBQTRCO0lBRGhELGFBQWEsQ0FBQyx5QkFBeUIsQ0FBQztHQUNwQiw0QkFBNEIsQ0F1RWhEO2VBdkVvQiw0QkFBNEIifQ==

@@ -196,7 +196,8 @@ async function update() {
             uri: urls_1.GDQUrls.ads,
             json: true
         }) : Promise.resolve([]);
-    const interviewsPromise = TRACKER_CREDENTIALS_CONFIGURED ?
+    console.log(TRACKER_CREDENTIALS_CONFIGURED);
+    const interviewsPromise = false ?
         request({
             uri: urls_1.GDQUrls.interviews,
             json: true
